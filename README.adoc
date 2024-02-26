@@ -1,0 +1,20 @@
+= 🤝🔐 Experimental Zero Trust Client for Apple devices
+
+This implementation is based on https://dsr.gematik.solutions/[DSR PoC]. The code has been rewritten with following goals in mind:
+
+* Minimum dependencies
+* CryptoKit support
+* Support for both MTLS and JOSE based client identities
+* Multi-client support to have several Trust Clients in one App
+
+.Usage example
+[source,swift]
+----
+client = try TrustClient(regURL: URL(string: "https://zerobin.spilikin.dev")!)
+let certificate = try await client.updateMTLSCertificate()
+let urlSession = try client.makeMTLSURLSession()
+let (data, response) = try await urlSession.data(from: URL(string: "https://zerobin.spilikin.dev/echo")!)
+if let data, let string = String(data: data, encoding: .utf8) {
+    print(string)
+}
+----
